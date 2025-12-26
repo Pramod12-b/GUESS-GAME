@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admission Form | Bhaktapur Multiple Campus</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #1a5276;
+            --secondary-color: #154360;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --border-color: #ddd;
+            --pdf-color: #27ae60;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .form-container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 550px;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 15px;
+        }
+
+        .header h2 {
+            color: var(--primary-color);
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 22px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input, select {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-submit { background-color: var(--primary-color); color: white; }
+        .btn-pdf { background-color: var(--pdf-color); color: white; }
+        
+        button:hover { opacity: 0.9; }
+
+        /* Hide buttons when generating PDF */
+        .no-print { display: block; }
+    </style>
+</head>
+<body>
+
+<div class="form-container" id="printable-form">
+    <div class="header">
+        <h2>Bhaktapur Multiple Campus</h2>
+        <p>Student Admission Copy</p>
+    </div>
+
+    <form id="admissionForm" action="https://formspree.io/f/xvzogzjd" method="POST" enctype="multipart/form-data">
+        
+        <div class="input-group">
+            <label>Full Name *</label>
+            <input type="text" name="Full Name" id="pdf_name" required>
+        </div>
+
+        <div class="input-group">
+            <label>Email Address *</label>
+            <input type="email" name="Email" id="pdf_email" required>
+        </div>
+
+        <div class="input-group">
+            <label>Faculty *</label>
+            <select name="Faculty" id="pdf_faculty" required>
+                <option value="BCA">BCA</option>
+                <option value="BBA">BBA</option>
+                <option value="BIT">BIT</option>
+                <option value="BSc CSIT">BSc CSIT</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>GPA (+2) *</label>
+            <input type="text" name="GPA" id="pdf_gpa" required>
+        </div>
+
+        <div class="button-group no-print">
+            <button type="submit" class="btn-submit">Submit to College</button>
+            <button type="button" class="btn-pdf" onclick="downloadPDF()">Download as PDF</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function downloadPDF() {
+        // Elements to hide from PDF
+        const element = document.getElementById('printable-form');
+        const buttons = document.querySelector('.button-group');
+        
+        // Temporarily hide buttons for the PDF
+        buttons.style.display = 'none';
+
+        const opt = {
+            margin:       10,
+            filename:     'Admission_Form_Bhaktapur.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2 },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        // Generate PDF and then show buttons back
+        html2pdf().set(opt).from(element).save().then(() => {
+            buttons.style.display = 'flex';
+        });
+    }
+</script>
+
+</body>
+</html>
